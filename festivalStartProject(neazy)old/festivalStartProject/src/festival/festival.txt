@@ -1,0 +1,48 @@
+public class Festival {
+    public static void main(String[] args) {
+        // Step 1: Ask for the festival name
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Wat is de naam van je festival? ");
+        String festivalName = scanner.nextLine();
+
+        // Step 2: Ask for the number of days the festival will last
+        System.out.print("Hoeveel dagen duurt je festival? ");
+        int numDays = scanner.nextInt();
+
+        // Step 3: Ask for the maximum number of visitors per day
+        System.out.print("Hoeveel bezoekers kan je per dag ontvangen? ");
+        int maxVisitorsPerDay = scanner.nextInt();
+
+        // Step 4: Ask for the start date of the festival
+        System.out.print("Wanneer zal je festival doorgaan? Geef de startdatum als volgt: jaar-maand-dag ");
+        String startDateStr = scanner.next();
+        LocalDate startDate = LocalDate.parse(startDateStr);
+
+        // Create an instance of the Bezoekers class
+        Bezoekers bezoekers = new Bezoekers(startDate, maxVisitorsPerDay, numDays);
+
+        // Step 5: Ask for the visitors' email addresses and booking days
+        scanner.nextLine(); // Consume the leftover new line character from the previous nextInt() call
+        System.out.println("Geef je bezoekers in via hun login, gevolgd door de dagen waarvoor ze boeken in volgend formaat: login1 (111 ...), login2 (xx1 ...), ...");
+        for (int i = 0; i < maxVisitorsPerDay; i++) {
+            System.out.print("Bezoeker " + (i + 1) + ": ");
+            String input = scanner.nextLine();
+            String[] parts = input.split("\\(");
+            String email = parts[0].trim();
+            String[] bookingDays = parts[1].replace(")", "").trim().split("");
+            for (int j = 0; j < bookingDays.length; j++) {
+                if (bookingDays[j].equals("1")) {
+                    bezoekers.boekBezoekerDag(email, startDate.plusDays(j));
+                }
+            }
+        }
+
+        // Step 6: Print the overview of visitors for each festival day
+        System.out.println("Bezoekers voor " + festivalName + " Festival:\n");
+        System.out.println(bezoekers.geefOverzichtBezoekers());
+
+        // Step 7: Print the visitors who booked tickets for all festival days
+        System.out.println("Alle bezoekers met een full ticket:");
+        System.out.println(bezoekers.geefzoekersFullTicket());
+    }
+}

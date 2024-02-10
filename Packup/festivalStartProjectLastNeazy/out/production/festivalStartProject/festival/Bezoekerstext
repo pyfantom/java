@@ -1,0 +1,41 @@
+package festival;
+
+import java.time.LocalDate;
+
+/**
+ * Deze klasse beheert de gegevens van de bezoekers en hun boekingen tijdens het festival.
+ */
+public class Bezoekers {
+
+    private final LocalDate START_FESTIVAL;
+    private int aantalDagen;
+    private String[] bezoekers;
+    private int[][] bezetting;
+
+    public Bezoekers(LocalDate startFestival, int maxBezoekersPerDag, int aantalDagen) {
+        // Constructor code remains unchanged
+    }
+
+    public boolean boekBezoekerDag(String emailadres, LocalDate dag) {
+        try {
+            int id = registreerBezoeker(emailadres);
+            if (id == -1) {
+                return false;
+            }
+            int dagIndex = (int) dag.toEpochDay() - START_FESTIVAL.toEpochDay();
+            if (dagIndex < 0 || dagIndex >= aantalDagen) {
+                return false;
+            }
+            if (bezetting[dagIndex][id - 1] == 1) {
+                return false;
+            }
+            bezetting[dagIndex][id - 1] = 1;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Other methods remain unchanged
+}

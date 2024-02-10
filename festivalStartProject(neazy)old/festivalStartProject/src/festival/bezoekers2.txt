@@ -1,0 +1,66 @@
+import java.time.LocalDate;
+import java.util.Arrays;
+
+public class Bezoekers {
+    private final LocalDate startFestival;
+    private final int aantalDagen;
+    private final String[] bezoekers;
+    private final int[][] bezetting;
+
+    public Bezoekers(LocalDate startFestival, int maxBezoekersPerDag, int aantalDagen) {
+        this.startFestival = startFestival;
+        this.aantalDagen = aantalDagen;
+        this.bezoekers = new String[maxBezoekersPerDag];
+        this.bezetting = new int[aantalDagen][maxBezoekersPerDag];
+    }
+
+    public boolean registreerBezoeker(String naam, LocalDate datum) {
+        if (datum.isBefore(startFestival) || datum.isAfter(startFestival.plusDays(aantalDagen - 1))) {
+            return false;
+        }
+        
+        int dagIndex = datum.getDayOfYear() - startFestival.getDayOfYear();
+        for (int i = 0; i < bezoekers.length; i++) {
+            if (bezoekers[i] == null) {
+                bezoekers[i] = naam;
+                bezetting[dagIndex][i] = 1;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public int getAantalBezoekersOpDag(LocalDate datum) {
+        if (datum.isBefore(startFestival) || datum.isAfter(startFestival.plusDays(aantalDagen - 1))) {
+            return -1;
+        }
+        
+        int dagIndex = datum.getDayOfYear() - startFestival.getDayOfYear();
+        int count = 0;
+        for (int i = 0; i < bezoekers.length; i++) {
+            if (bezetting[dagIndex][i] == 1) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public String[] getBezoekersOpDag(LocalDate datum) {
+        if (datum.isBefore(startFestival) || datum.isAfter(startFestival.plusDays(aantalDagen - 1))) {
+            return null;
+        }
+
+        int dagIndex = datum.getDayOfYear() - startFestival.getDayOfYear();
+        String[] result = new String[bezoekers.length];
+        int count = 0;
+        for (int i = 0; i < bezoekers.length; i++) {
+            if (bezetting[dagIndex][i] == 1) {
+                result[count] = bezoekers[i];
+                count++;
+            }
+        }
+        return Arrays.copyOfRange(result, 0, count);
+    }
+}

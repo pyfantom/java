@@ -1,0 +1,80 @@
+import java.time.LocalDate;
+import java.util.Arrays;
+
+public class Bezoekers {
+    private final LocalDate startFestival;
+    private final int aantalDagen;
+    private final String[] bezoekers;
+    private final int[][]etting;
+
+    public Bezoekers(LocalDate startFestival, int maxBezoekersPerDag, int aantalDagen {
+        this.startFestival = startFestival;
+        this.aantalDagen =Dagen;
+        this.bezoekers = new String[maxBezoekersPerDag];
+        this.bezetting = new int[aantalDagen][maxBezoekersPerDag];
+    }
+
+    public boolean boekBezoekerDag(String email, LocalDate dag) {
+        int id =reerBezoeker(email);
+        if (id == -1 || bezetting[dag.getDayOfMonth() - 1][id - 1] != 0) {
+            return false;
+        }
+        bezetting[dag.getDayOfMonth() - 1][id - 1] = 1;
+        return true;
+    }
+
+    public int registreerBezoeker(String email) {
+        int index = Arrays.asList(bezoekers).indexOf(email);
+        if (index != -1) {
+            return index + 1;
+        }
+        for (int i = 0; i < bezoekers.length; i++) {
+            if (bezoekers[i] == null) {
+                bezoekers[i] = email;
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+
+    public String geefBezoekersFullTicket() {
+        StringBuilder fullTicket = new StringBuilder();
+        for (int i = 0; i < bezoekers.length; i++) {
+            boolean hasTicketForAllDays = true;
+            for (int j = 0; j < aantalDagen; j++) {
+                if (bezetting[j][i] == 0) {
+                    hasTicketForAllDays = false;
+                    break;
+                }
+            }
+            if (hasTicketForAllDays) {
+                fullTicket.append(bezoekers[i]).append(" , ");
+            }
+        }
+        return fullTicket.toString();
+    }
+
+    public String geefOverzichtBezoekers() {
+        StringBuilder overzicht = new StringBuilder();
+        for (int i = 0; i < aantalDagen; i++) {
+            overzicht.append(startFestival.plusDays(i)).append("\n");
+            overzicht.append("Bezoekers voor deze dag\t");
+            for (int j = 0; j < bezoekers.length; j++) {
+                if (bezetting[i][j] == 1) {
+                    overzicht.append(bezoekers[j]).append("\t");
+                }
+            }
+            overzicht.append("\n");
+        }
+        return overzicht.toString();
+    }
+
+    /**
+     * Generate the Javadoc HTML for the Bezoekers class.
+     *
+     * @see <a href="https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html">Javadoc Tool Documentation</a>
+     */
+    public void generateJavadoc() {
+        // TODO: Implement code to generate Javadoc HTML
+    }
+}

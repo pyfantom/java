@@ -1,0 +1,25 @@
+import java.time.LocalDate;
+
+public class Festival {
+    private final LocalDate startFestival;
+    private final int aantalDagen;
+    private Bezoekers bezoekers;
+
+    public Festival(LocalDate startFestival, int aantalDagen, int maxBezoekersPerDag) {
+        this.startFestival = startFestival;
+        this.aantalDagen = aantalDagen;
+        this.bezoekers = new Bezoekers(startFestival, maxBezoekersPerDag, aantalDagen);
+    }
+
+    public boolean registreerBezoeker(String naam, LocalDate datum) {
+        return bezoekers.registreerBezoeker(naam, datum);
+    }
+
+    public int getAantalBezoekersOpDag(LocalDate datum) {
+        return bezoekers.getAantalBezoekersOpDag(datum);
+    }
+
+    public String[] getBezoekersOpDag(LocalDate datum) {
+        return bezoekers.getBezoekersOpDag(datum);
+    }
+}
